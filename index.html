@@ -168,8 +168,46 @@
             <button class="buy-button">Add to Cart</button>
         </div>
     </section>
+               // 1. 设置一个变量，用来记住购物车里的数量（初始为0）
+let cartCount = 0;
 
+// 2. 找到页面上右上角那个显示购物车的元素
+let cartElement = document.querySelector('.cart');
+
+// 3. 找到页面上所有的“Add to Cart”按钮
+// 注意这里用的是 querySelectorAll，因为它会把所有的按钮都抓出来放在一个列表里
+let buyButtons = document.querySelectorAll('.buy-button');
+
+// 4. 给每一个按钮都安排一个“点击监听器”
+buyButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        
+        // 当按钮被点击时，购物车数量 +1
+        cartCount = cartCount + 1;
+
+        // 把右上角的文字更新成最新的数量
+        cartElement.innerText = "🛒 Cart (" + cartCount + ")";
+
+        // --- 以下是提升用户体验的高级魔法（按钮反馈） ---
+        
+        // 记住按钮原本的文字和颜色
+        let originalText = button.innerText; 
+        
+        // 按钮变成成功提示的状态
+        button.innerText = "Added! ✓";      
+        button.style.backgroundColor = "#4CAF50"; // 变成好看的绿色
+
+        // 设定一个定时器：1000毫秒（1秒）后，让按钮变回原来的黑色样子
+        setTimeout(function() {
+            button.innerText = originalText;
+            button.style.backgroundColor = "#1a1a1a";
+        }, 1000);
+
+    });
+});
+    
     <script>
+        
     </script>
 </body>
 </html>
