@@ -55,7 +55,6 @@
         /* --- 商品网格布局 --- */
         .product-grid {
             display: grid; 
-            /* 修正了拼写错误：minmax */
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
             gap: 30px; 
             padding: 50px; 
@@ -71,7 +70,6 @@
             padding: 15px;
             text-align: center;
             transition: transform 0.3s; 
-            /* 补回了按钮对齐的魔法 */
             display: flex;
             flex-direction: column;
             height: 100%;
@@ -120,7 +118,6 @@
             width: 100%;
             border-radius: 4px;
             font-size: 14px;
-            /* 补回了把按钮推到最底部的魔法 */
             margin-top: auto; 
         }
         .buy-button:hover { background-color: #555; }
@@ -141,29 +138,29 @@
 
     <section class="product-grid">
         <div class="product-card">
-            <img class="product-image" src="images/bag.webp" alt="经典极简腋下包">
-            <h3 class="product-title">经典极简腋下包</h3>
+            <img class="product-image" src="images/bag.webp" alt="Classic minimalist shoulder bag">
+            <h3 class="product-title">Classic minimalist shoulder bag</h3>
             <p class="product-price">RM 259.00</p>
             <button class="buy-button">Add to Cart</button>
         </div>
 
         <div class="product-card">
-            <img class="product-image" src="images/top.webp" alt="基础款短版上衣">
-            <h3 class="product-title">基础款短版上衣</h3>
+            <img class="product-image" src="images/top.webp" alt="Basic cropped top">
+            <h3 class="product-title">Basic cropped top</h3>
             <p class="product-price">RM 59.00</p>
             <button class="buy-button">Add to Cart</button>
         </div>
 
         <div class="product-card">
-            <img class="product-image" src="images/denim.webp" alt="高腰直筒微喇牛仔裤">
-            <h3 class="product-title">高腰直筒微喇牛仔裤</h3>
+            <img class="product-image" src="images/denim.webp" alt="High-waisted straight-leg slightly flared jeans">
+            <h3 class="product-title">High-waisted straight-leg slightly flared jeans</h3>
             <p class="product-price">RM 129.00</p>
             <button class="buy-button">Add to Cart</button>
         </div>
 
         <div class="product-card">
-            <img class="product-image" src="images/tshirt.webp" alt="落肩款宽松印花 T-Shirt">
-            <h3 class="product-title">落肩款宽松印花 T-Shirt</h3>
+            <img class="product-image" src="images/tshirt.webp" alt="Oversized drop-shoulder printed top ">
+            <h3 class="product-title">Oversized drop-shoulder printed top</h3>
             <p class="product-price">RM 79.00</p>
             <button class="buy-button">Add to Cart</button>
         </div>
@@ -171,44 +168,44 @@
     
 
     <script>
-         // 1. 设置一个变量，用来记住购物车里的数量（初始为0）
+        // 1. 读取记忆：检查浏览器是否记住了购物车的数量。如果没有，就从 0 开始。
+let savedCount = localStorage.getItem('kexinCartCount');
 let cartCount = 0;
 
-// 2. 找到页面上右上角那个显示购物车的元素
-let cartElement = document.querySelector('.cart');
+if (savedCount !== null) {
+    cartCount = parseInt(savedCount); // 把保存的文本重新转换成数字
+}
 
-// 3. 找到页面上所有的“Add to Cart”按钮
-// 注意这里用的是 querySelectorAll，因为它会把所有的按钮都抓出来放在一个列表里
+// 2. 立即更新界面：当页面一加载，马上显示被记住的正确数字
+let cartElement = document.querySelector('.cart');
+cartElement.innerText = "🛒 Cart (" + cartCount + ")";
+
+// 3. 监听点击事件
 let buyButtons = document.querySelectorAll('.buy-button');
 
-// 4. 给每一个按钮都安排一个“点击监听器”
 buyButtons.forEach(function(button) {
     button.addEventListener('click', function() {
         
-        // 当按钮被点击时，购物车数量 +1
+        // 购物车数量 +1
         cartCount = cartCount + 1;
 
-        // 把右上角的文字更新成最新的数量
+        // 更新屏幕上显示的文字
         cartElement.innerText = "🛒 Cart (" + cartCount + ")";
 
-        // --- 以下是提升用户体验的高级魔法（按钮反馈） ---
-        
-        // 记住按钮原本的文字和颜色
-        let originalText = button.innerText; 
-        
-        // 按钮变成成功提示的状态
-        button.innerText = "Added! ✓";      
-        button.style.backgroundColor = "#4CAF50"; // 变成好看的绿色
+        // ✨ 魔法在这里：把最新的数字保存到浏览器的记忆里！ ✨
+        localStorage.setItem('kexinCartCount', cartCount);
 
-        // 设定一个定时器：1000毫秒（1秒）后，让按钮变回原来的黑色样子
+        // --- 视觉反馈 (让按钮变绿) ---
+        let originalText = button.innerText; 
+        button.innerText = "Added! ✓";      
+        button.style.backgroundColor = "#4CAF50"; 
+
         setTimeout(function() {
             button.innerText = originalText;
             button.style.backgroundColor = "#1a1a1a";
         }, 1000);
-
     });
 });
-        
     </script>
 </body>
 </html>
