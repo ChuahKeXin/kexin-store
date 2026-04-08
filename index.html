@@ -182,34 +182,46 @@
     
 
     <script>
-        // 1. 读取记忆：检查浏览器是否记住了购物车的数量。如果没有，就从 0 开始。
-let savedCount = localStorage.getItem('kexinCartCount');
-let cartCount = 0;
-
-if (savedCount !== null) {
-    cartCount = parseInt(savedCount); // 把保存的文本重新转换成数字
+        let savedItems = localStorage.getItem('kexinCartItems');
+let cartItems = [];
+if (savedItems !== null) {
+    cartItems = JSON.parse(savedItems); // 把保存的文字变回列表
 }
 
-// 2. 立即更新界面：当页面一加载，马上显示被记住的正确数字
+// 2. 页面加载时，更新购物车数量显示
 let cartElement = document.querySelector('.cart');
-cartElement.innerText = "🛒 Cart (" + cartCount + ")";
+cartElement.innerText = "🛒 Cart (" + cartItems.length + ")"; // length 就是列表里有几件东西
 
-// 3. 监听点击事件
+// 3. 给所有的购买按钮添加监听器
 let buyButtons = document.querySelectorAll('.buy-button');
 
 buyButtons.forEach(function(button) {
     button.addEventListener('click', function() {
         
-        // 购物车数量 +1
-        cartCount = cartCount + 1;
+        // ✨ 新魔法：抓取商品信息 ✨
+        // button.parentElement 指的是包住这个按钮的那个大方块 (.product-card)
+        let card = button.parentElement; 
+        
+        // 从这个大方块里，找出图片地址、名字和价格
+        let itemImg = card.querySelector('.product-image').src;
+        let itemTitle = card.querySelector('.product-title').innerText;
+        let itemPrice = card.querySelector('.product-price').innerText;
 
-        // 更新屏幕上显示的文字
-        cartElement.innerText = "🛒 Cart (" + cartCount + ")";
+        // 把找出的信息打包成一个小包裹 (Object)，塞进我们的购物车列表里
+        let newItem = {
+            title: itemTitle,
+            price: itemPrice,
+            image: itemImg
+        };
+        cartItems.push(newItem);
 
-        // ✨ 魔法在这里：把最新的数字保存到浏览器的记忆里！ ✨
-        localStorage.setItem('kexinCartCount', cartCount);
+        // 把更新后的列表保存到浏览器的记忆里 (必须转换成文字格式才能存)
+        localStorage.setItem('kexinCartItems', JSON.stringify(cartItems));
 
-        // --- 视觉反馈 (让按钮变绿) ---
+        // 更新右上角的数字
+        cartElement.innerText = "🛒 Cart (" + cartItems.length + ")";
+
+        // 按钮变绿的视觉反馈
         let originalText = button.innerText; 
         button.innerText = "Added! ✓";      
         button.style.backgroundColor = "#4CAF50"; 
