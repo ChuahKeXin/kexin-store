@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>My Cart - kexin-store</title>
+    <style>
+      
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #fafafa; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .logo a { font-size: 24px; font-weight: bold; letter-spacing: 20px; color: #000; text-decoration: none; }
+        .nav-links { display: flex; list-style: none; gap: 70px; margin: 0; padding: 0; }
+        .nav-links a { text-decoration: none; color: #333; font-size: 14px; font-weight: 500; text-transform: uppercase; }
+        
+        
+        .cart-container { max-width: 800px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+        
+        
+        .cart-item { display: flex; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0; }
+        .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; margin-right: 20px; background-color: #f9f9f9;}
+        .item-details { flex-grow: 1; }
+        .item-title { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
+        .item-price { color: #666; }
+        
+        .empty-message { text-align: center; color: #999; padding: 40px; }
+        .clear-btn { margin-top: 20px; padding: 10px 20px; background-color: #ff4d4f; color: white; border: none; border-radius: 4px; cursor: pointer; float: right;}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><a href="index.html">KEXIN</a></div>
+        <ul class="nav-links">
+            <li><a href="croptops.html">Crop Tops</a></li>
+            <li><a href="#">Denim</a></li>
+            <li><a href="#">Oversized</a></li>
+            <li><a href="#">Bags</a></li>
+        </ul>
+        <a href="cart.html" class="cart" style="text-decoration: none; color: #333; font-weight: bold;">🛒 Cart (0)</a>
+    </nav>
+
+    <div class="cart-container">
+        <h1>Your Shopping Cart</h1>
+        
+        <div id="cart-items-list"></div>
+
+        <button class="clear-btn" id="clear-cart" style="display: none;">Empty Cart</button>
+        <div style="clear: both;"></div>
+    </div>
+
+    <script>
+       
+        let savedItems = localStorage.getItem('kexinCartItems');
+        let cartItems = [];
+        if (savedItems !== null) {
+            cartItems = JSON.parse(savedItems);
+        }
+
+       
+        document.querySelector('.cart').innerText = "🛒 Cart (" + cartItems.length + ")";
+
+        
+        let listContainer = document.getElementById('cart-items-list');
+        let clearBtn = document.getElementById('clear-cart');
+
+        if (cartItems.length === 0) {
+           
+            listContainer.innerHTML = "<div class='empty-message'>Your cart is empty. Go add some beautiful clothes!</div>";
+        } else {
+            
+            clearBtn.style.display = "block"; 
+            
+            cartItems.forEach(function(item) {
+                
+                let itemHTML = `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="product">
+                        <div class="item-details">
+                            <div class="item-title">${item.title}</div>
+                            <div class="item-price">${item.price}</div>
+                        </div>
+                    </div>
+                `;
+                listContainer.innerHTML += itemHTML; 
+            });
+        }
+
+    
+        clearBtn.addEventListener('click', function() {
+            localStorage.removeItem('kexinCartItems'); 
+            location.reload(); 
+        });
+    </script>
+</body>
+</html>
